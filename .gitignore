@@ -1,6 +1,12 @@
 #caches
 __pycache__
+*.pyc
 
+# databases
+*.db
+
+# tests
+*test*.*
 
 # envs
 .env
