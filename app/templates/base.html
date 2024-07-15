@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     {% if title %}
     <title>{{title}}-Microblog</title>
-
+    
     {% else %}
     <title>Welcome to Microblog</title>
     {% endif %}
@@ -15,7 +15,11 @@
 <body>
     <div>Microblog:
         <a href="{{ url_for('index') }}"> Home</a>
+        {% if current_user.is_anonymous %}
         <a href="{{ url_for('login') }}"> Log In</a>
+        {% else %}
+        <a href="{{ url_for('logout') }}"> Log Out</a>
+        {% endif %}
     </div>
     <hr>
     {% with messages = get_flashed_messages() %}

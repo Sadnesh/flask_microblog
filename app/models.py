@@ -1,11 +1,13 @@
-from app import db
+from app import db, login
 import sqlalchemy as sal
 from typing import Optional
 import sqlalchemy.orm as sorm
+from flask_login import UserMixin
 from datetime import datetime, timezone
+from werkzeug.security import generate_password_hash, check_password_hash
 
 
-class User(db.Model):
+class User(UserMixin, db.Model):
     id: sorm.Mapped[int] = sorm.mapped_column(primary_key=True)
     username: sorm.Mapped[str] = sorm.mapped_column(
         sal.String(64), index=True, unique=True
@@ -15,6 +17,14 @@ class User(db.Model):
     )
     password_hash: sorm.Mapped[Optional[str]] = sorm.mapped_column(sal.String(256))
     posts: sorm.WriteOnlyMapped["Post"] = sorm.relationship(back_populates="author")
+
+    def set_password(self, password):
+        self.password_hash = generate_password_hash(password)
+
+    def check_password(self, password):
+        if self.password_hash is None:
+            return False
+        return check_password_hash(self.password_hash, password)
 
     def __repr__(self):
         return "<User {}>".format(self.username)
@@ -31,3 +41,8 @@ class Post(db.Model):
 
     def __repr__(self) -> str:
         return "<Post {}>".format(self.body)
+
+
+@login.user_loader
+def load_user(id):
+    return db.session.get(User, int(id))
