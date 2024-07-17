@@ -1,5 +1,6 @@
-from app import db, login
+from hashlib import md5
 import sqlalchemy as sal
+from app import db, login
 from typing import Optional
 import sqlalchemy.orm as sorm
 from flask_login import UserMixin
@@ -25,6 +26,10 @@ class User(UserMixin, db.Model):
         if self.password_hash is None:
             return False
         return check_password_hash(self.password_hash, password)
+
+    def avatar(self, size):
+        digest = md5(self.email.lower().encode("utf-8")).hexdigest()
+        return f"https://www.gravatar.com/avatar/{digest}?d=identicon&s={size}"
 
     def __repr__(self):
         return "<User {}>".format(self.username)
