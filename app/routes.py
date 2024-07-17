@@ -1,9 +1,8 @@
 from app import app, db
 import sqlalchemy as sal
 from app.models import User
-from .forms import LoginForm
+from .forms import LoginForm, RegistrationForm
 from urllib.parse import urlsplit
-from app.forms import RegistrationForm
 from flask_login import current_user, login_user, logout_user, login_required
 from flask import render_template, flash, redirect, url_for, request
 
@@ -62,3 +61,16 @@ def register():
         flash("Congrats, you're now a registered user!")
         return redirect(url_for("login"))
     return render_template("register.html", title="Register", form=form)
+
+
+@app.route("/user/<username>")
+@login_required
+def user(username: str):
+    user = db.first_or_404(sal.select(User).where(User.username == username))
+    name = user.username
+    posts = [
+        {"author": {"username": f"{name}"}, "body": "k xa soltini"},
+        {"author": {"username": f"{name}"}, "body": "hoina nani ramri paltera kata"},
+        {"author": {"username": f"{name}"}, "body": "i sometimes think i am a creep"},
+    ]
+    return render_template("user.html", user=user, posts=posts)
