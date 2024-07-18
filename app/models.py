@@ -18,6 +18,10 @@ class User(UserMixin, db.Model):
     )
     password_hash: sorm.Mapped[Optional[str]] = sorm.mapped_column(sal.String(256))
     posts: sorm.WriteOnlyMapped["Post"] = sorm.relationship(back_populates="author")
+    about_me: sorm.Mapped[Optional[str]] = sorm.mapped_column(sal.String(140))
+    last_seen: sorm.Mapped[Optional[datetime]] = sorm.mapped_column(
+        default=lambda: datetime.now(timezone.utc)
+    )
 
     def set_password(self, password):
         self.password_hash = generate_password_hash(password)

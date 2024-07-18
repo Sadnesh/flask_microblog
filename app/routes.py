@@ -1,10 +1,11 @@
 from app import app, db
 import sqlalchemy as sal
 from app.models import User
-from .forms import LoginForm, RegistrationForm
 from urllib.parse import urlsplit
-from flask_login import current_user, login_user, logout_user, login_required
+from datetime import datetime, timezone
+from .forms import LoginForm, RegistrationForm
 from flask import render_template, flash, redirect, url_for, request
+from flask_login import current_user, login_user, logout_user, login_required
 
 
 @app.route("/")
@@ -74,3 +75,10 @@ def user(username: str):
         {"author": {"username": f"{name}"}, "body": "i sometimes think i am a creep"},
     ]
     return render_template("user.html", user=user, posts=posts)
+
+
+@app.before_request
+def before_request():
+    if current_user.is_authenticated:
+        current_user.last_seen = datetime.now(timezone.utc)
+        db.session.commit()
