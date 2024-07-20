@@ -16,7 +16,7 @@ def index():
     if form.validate_on_submit():
         post = Post()
         post.body = form.post.data
-        post.author = current_user.username
+        post.author = current_user  # type:ignore
         db.session.add(post)
         db.session.commit()
         flash("Your post is now live!")
@@ -74,12 +74,7 @@ def register():
 def user(username: str):
     form = EmptyForm()
     user = db.first_or_404(sal.select(User).where(User.username == username))
-    name = user.username
-    posts = [
-        {"author": {"username": f"{name}"}, "body": "k xa soltini"},
-        {"author": {"username": f"{name}"}, "body": "hoina nani ramri paltera kata"},
-        {"author": {"username": f"{name}"}, "body": "i sometimes think i am a creep"},
-    ]
+    posts = db.session.scalars(current_user.following_posts()).all()
     return render_template("user.html", user=user, posts=posts, form=form)
 
 
@@ -148,3 +143,11 @@ def unfollow(username):
         return redirect(url_for("user", username=username))
     else:
         return redirect(url_for("index"))
+
+
+@app.route("/explore")
+@login_required
+def explore():
+    query = sal.select(Post).order_by(Post.timestamp.desc())
+    posts = db.session.scalars(query).all()
+    return render_template("index.html", title="Explore", posts=posts)
