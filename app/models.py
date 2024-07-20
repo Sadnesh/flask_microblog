@@ -79,6 +79,18 @@ class User(UserMixin, db.Model):
         )
         return db.session.scalar(query)
 
+    def following_posts(self):
+        Author = sorm.aliased(User)
+        Follower = sorm.aliased(User)
+        return (
+            sal.select(Post)
+            .join(Post.author.of_type(Author))
+            .join(Author.followers.of_type(Follower), isouter=True)
+            .where(sal.or_(Follower.id == self.id, Author.id == self.id))
+            .group_by(Post.id)
+            .order_by(Post.timestamp.desc())
+        )
+
     def __repr__(self):
         return "<User {}>".format(self.username)
 
