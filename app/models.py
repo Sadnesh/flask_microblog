@@ -7,6 +7,13 @@ from flask_login import UserMixin
 from datetime import datetime, timezone
 from werkzeug.security import generate_password_hash, check_password_hash
 
+followers = sal.Table(
+    "followers",
+    db.metadata,
+    sal.Column("follower_id", sal.Integer, sal.ForeignKey("user.id"), primary_key=True),
+    sal.Column("followed_id", sal.Integer, sal.ForeignKey("user.id"), primary_key=True),
+)
+
 
 class User(UserMixin, db.Model):
     id: sorm.Mapped[int] = sorm.mapped_column(primary_key=True)
@@ -21,6 +28,19 @@ class User(UserMixin, db.Model):
     about_me: sorm.Mapped[Optional[str]] = sorm.mapped_column(sal.String(140))
     last_seen: sorm.Mapped[Optional[datetime]] = sorm.mapped_column(
         default=lambda: datetime.now(timezone.utc)
+    )
+
+    following: sorm.WriteOnlyMapped["User"] = sorm.relationship(
+        secondary=followers,
+        primaryjoin=(followers.c.follower_id == id),
+        secondaryjoin=(followers.c.followed_id == id),
+        back_populates="followers",
+    )
+    followers: sorm.WriteOnlyMapped["User"] = sorm.relationship(
+        secondary=followers,
+        primaryjoin=(followers.c.followed_id == id),
+        secondaryjoin=(followers.c.follower_id == id),
+        back_populates="following",
     )
 
     def set_password(self, password):
