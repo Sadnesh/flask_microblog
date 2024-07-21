@@ -15,3 +15,4 @@ class Config:
     MAIL_USERNAME = os.environ.get("MAIL_USERNAME")
     MAIL_PASSWORD = os.environ.get("MAIL_PASSWORD")
     ADMINS = ["your-email@example.com"]  # list of admins who need to be notified
+    POSTS_PER_PAGE = 3
