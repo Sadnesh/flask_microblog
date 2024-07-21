@@ -87,10 +87,31 @@ def register():
 @app.route("/user/<username>")
 @login_required
 def user(username: str):
-    form = EmptyForm()
     user = db.first_or_404(sal.select(User).where(User.username == username))
-    posts = db.session.scalars(current_user.following_posts()).all()
-    return render_template("user.html", user=user, posts=posts, form=form)
+    page = request.args.get("page", 1, type=int)
+    query = user.posts.select().order_by(Post.timestamp.desc())
+    posts = db.paginate(
+        query, page=page, per_page=app.config["POSTS_PER_PAGE"], error_out=False
+    )
+    next_url = (
+        url_for("user", username=user.username, page=posts.next_num)
+        if posts.has_next
+        else None
+    )
+    prev_url = (
+        url_for("user", username=user.username, page=posts.prev_num)
+        if posts.has_prev
+        else None
+    )
+    form = EmptyForm()
+    return render_template(
+        "user.html",
+        user=user,
+        posts=posts.items,
+        form=form,
+        next_url=next_url,
+        prev_url=prev_url,
+    )
 
 
 @app.before_request
