@@ -4,8 +4,9 @@ import sqlalchemy as sal
 from app.email import send_password_reset_email
 from app.models import User, Post
 from urllib.parse import urlsplit
+from flask_babel import _, get_locale
 from datetime import datetime, timezone
-from flask import render_template, flash, redirect, url_for, request
+from flask import render_template, flash, redirect, url_for, request, g
 from flask_login import current_user, login_user, logout_user, login_required
 from .forms import (
     LoginForm,
@@ -42,7 +43,7 @@ def index():
     prev_url = url_for("index", page=posts.prev_num) if posts.has_prev else None
     return render_template(
         "index.html",
-        title="Home page",
+        title=_("Home page"),
         form=form,
         posts=posts.items,
         next_url=next_url,
@@ -68,7 +69,7 @@ def login():
             next_page = url_for("index")
         return redirect(next_page)
 
-    return render_template("login.html", title="Log In", form=form)
+    return render_template("login.html", title=_("Log In"), form=form)
 
 
 @app.route("/logout")
@@ -91,7 +92,7 @@ def register():
         db.session.commit()
         flash(_("Congrats, you're now a registered user!"))
         return redirect(url_for("login"))
-    return render_template("register.html", title="Register", form=form)
+    return render_template("register.html", title=_("Register"), form=form)
 
 
 @app.route("/user/<username>")
@@ -129,6 +130,7 @@ def before_request():
     if current_user.is_authenticated:
         current_user.last_seen = datetime.now(timezone.utc)
         db.session.commit()
+        g.locale = str(get_locale())
 
 
 @app.route("/edit_profile", methods=["GET", "POST"])
@@ -147,7 +149,7 @@ def edit_profile():
         form.username.data = current_user.username
         form.about_me.data = current_user.about_me
 
-    return render_template("edit_profile.html", title="Edit profile", form=form)
+    return render_template("edit_profile.html", title=_("Edit profile"), form=form)
 
 
 @app.route("/follow/<username>", methods=["POST"])
@@ -203,7 +205,7 @@ def explore():
     prev_url = url_for("explore", page=posts.prev_num) if posts.has_prev else None
     return render_template(
         "index.html",
-        title="Explore",
+        title=_("Explore"),
         posts=posts.items,
         next_url=next_url,
         prev_url=prev_url,
@@ -224,7 +226,7 @@ def reset_password_request():
         )  # send even if the user is not found to not let users find if a given user is member or not
         return redirect(url_for("login"))
     return render_template(
-        "reset_password_request.html", title="Reset Password", form=form
+        "reset_password_request.html", title=_("Reset Password"), form=form
     )
 
 

@@ -11,3 +11,9 @@ __pycache__
 # envs
 .env
 .venv
+
+# pot file
+*.pot
+
+# mo file
+.mo

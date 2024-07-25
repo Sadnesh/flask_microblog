@@ -2,48 +2,55 @@ from app import db
 import sqlalchemy as sal
 from app.models import User
 from flask_wtf import FlaskForm
+from flask_babel import _, lazy_gettext as _l
 from wtforms.validators import DataRequired, ValidationError, Email, EqualTo, Length
 from wtforms import StringField, PasswordField, BooleanField, SubmitField, TextAreaField
 
 
 class LoginForm(FlaskForm):
-    username = StringField("Username", validators=[DataRequired()])
-    password = PasswordField("Password", validators=[DataRequired()])
-    remember_me = BooleanField("Remember Me")
-    submit = SubmitField("Log In")
+    username = StringField(_l("Username"), validators=[DataRequired()])  # type:ignore
+    password = PasswordField(_l("Password"), validators=[DataRequired()])  # type:ignore
+    remember_me = BooleanField(_l("Remember Me"))  # type:ignore
+    submit = SubmitField(_l("Log In"))  # type:ignore
 
 
 class PostForm(FlaskForm):
     post = TextAreaField(
-        "Say something", validators=[DataRequired(), Length(min=1, max=140)]
+        _l("Say something"),  # type:ignore
+        validators=[DataRequired(), Length(min=1, max=140)],
     )
-    submit = SubmitField("Submit")
+    submit = SubmitField(_l("Submit"))  # type:ignore
 
 
 class RegistrationForm(FlaskForm):
-    username = StringField("Username", validators=[DataRequired()])
-    email = StringField("Email", validators=[DataRequired(), Email()])
-    password = PasswordField("Password", validators=[DataRequired()])
-    password2 = PasswordField(
-        "Repeat Password", validators=[DataRequired(), EqualTo("password")]
+    username = StringField(_l("Username"), validators=[DataRequired()])  # type:ignore
+    email = StringField(
+        _l("Email"), validators=[DataRequired(), Email()]  # type:ignore
     )
-    submit = SubmitField("Register")
+    password = PasswordField(_l("Password"), validators=[DataRequired()])  # type:ignore
+    password2 = PasswordField(
+        _l("Repeat Password"),  # type:ignore
+        validators=[DataRequired(), EqualTo("password")],
+    )
+    submit = SubmitField(_l("Register"))  # type:ignore
 
     def validate_username(self, username):
         user = db.session.scalar(sal.select(User).where(User.username == username.data))
         if user is not None:
-            raise ValidationError("Please use a different username.")
+            raise ValidationError(_("Please use a different username."))
 
     def validate_email(self, email):
         user = db.session.scalar(sal.select(User).where(User.email == email.data))
         if user is not None:
-            raise ValidationError("Please use a different email address.")
+            raise ValidationError(_("Please use a different email address."))
 
 
 class EditProfileForm(FlaskForm):
-    username = StringField("Username", validators=[DataRequired()])
-    about_me = TextAreaField("About me", validators=[Length(min=0, max=140)])
-    submit = SubmitField("Submit")
+    username = StringField(_l("Username"), validators=[DataRequired()])  # type:ignore
+    about_me = TextAreaField(
+        _l("About me"), validators=[Length(min=0, max=140)]  # type:ignore
+    )
+    submit = SubmitField(_l("Submit"))  # type:ignore
 
     def __init__(self, original_username, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -55,7 +62,7 @@ class EditProfileForm(FlaskForm):
                 sal.select(User).where(User.username == username.data)
             )
             if user is not None:
-                raise ValidationError("Please use a different username")
+                raise ValidationError(_("Please use a different username"))
 
 
 # For follow and unfollow actions (for now)
@@ -64,13 +71,16 @@ class EmptyForm(FlaskForm):
 
 
 class ResetPasswordRequestForm(FlaskForm):
-    email = StringField("Email", validators=[DataRequired(), Email()])
-    submit = SubmitField("Request password reset")
+    email = StringField(
+        _l("Email"), validators=[DataRequired(), Email()]  # type:ignore
+    )
+    submit = SubmitField(str(_l("Request password reset")))
 
 
 class ResetPasswordForm(FlaskForm):
-    password = PasswordField("Password", validators=[DataRequired()])
+    password = PasswordField(_l("Password"), validators=[DataRequired()])  # type:ignore
     password2 = PasswordField(
-        "Repeat Password", validators=[DataRequired(), EqualTo("password")]
+        _l("Repeat Password"),  # type:ignore
+        validators=[DataRequired(), EqualTo("password")],
     )
-    submit = SubmitField("Rest password")
+    submit = SubmitField(_l("Rest password"))  # type:ignore

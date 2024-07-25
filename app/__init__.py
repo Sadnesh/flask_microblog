@@ -2,7 +2,7 @@ import os
 import logging
 from config import Config
 from flask_mail import Mail
-from flask_babel import Babel
+from flask_babel import Babel, lazy_gettext as _l
 from flask_moment import Moment
 from flask import Flask, request
 from flask_migrate import Migrate
@@ -24,6 +24,7 @@ babel = Babel(app, locale_selector=get_locale)
 migrate = Migrate(app, db)
 login = LoginManager(app)
 login.login_view = "login"  # type:ignore
+login.login_message = str(_l("Please log in to access this page."))
 
 if not app.debug:
     if app.config["MAIL_SERVER"]:
