@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2024-07-25 22:44+0545\n"
+"POT-Creation-Date: 2024-07-26 22:10+0545\n"
 "PO-Revision-Date: 2024-07-25 22:48+0545\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: ne\n"
@@ -26,11 +26,11 @@ msgstr ""
 msgid "[Microblog] Reset Your Password"
 msgstr ""
 
-#: app/forms.py:11 app/forms.py:25 app/forms.py:45
+#: app/forms.py:11 app/forms.py:26 app/forms.py:49
 msgid "Username"
 msgstr ""
 
-#: app/forms.py:12 app/forms.py:27 app/forms.py:73
+#: app/forms.py:12 app/forms.py:30 app/forms.py:81
 msgid "Password"
 msgstr ""
 
@@ -38,7 +38,8 @@ msgstr ""
 msgid "Remember Me"
 msgstr ""
 
-#: app/forms.py:14 app/routes.py:72 app/templates/login.html:6
+#: app/forms.py:14 app/routes.py:72 app/templates/base.html:38
+#: app/templates/login.html:6
 msgid "Log In"
 msgstr ""
 
@@ -46,43 +47,43 @@ msgstr ""
 msgid "Say something"
 msgstr ""
 
-#: app/forms.py:21 app/forms.py:47
+#: app/forms.py:22 app/forms.py:53
 msgid "Submit"
 msgstr ""
 
-#: app/forms.py:26 app/forms.py:68
+#: app/forms.py:28 app/forms.py:75
 msgid "Email"
 msgstr ""
 
-#: app/forms.py:29 app/forms.py:75
+#: app/forms.py:32 app/forms.py:83
 msgid "Repeat Password"
 msgstr ""
 
-#: app/forms.py:31 app/routes.py:95 app/templates/register.html:5
+#: app/forms.py:35 app/routes.py:95 app/templates/register.html:5
 msgid "Register"
 msgstr ""
 
-#: app/forms.py:36
+#: app/forms.py:40
 msgid "Please use a different username."
 msgstr ""
 
-#: app/forms.py:41
+#: app/forms.py:45
 msgid "Please use a different email address."
 msgstr ""
 
-#: app/forms.py:46
+#: app/forms.py:51
 msgid "About me"
 msgstr ""
 
-#: app/forms.py:59
+#: app/forms.py:65
 msgid "Please use a different username"
 msgstr ""
 
-#: app/forms.py:69
+#: app/forms.py:77
 msgid "Request password reset"
 msgstr ""
 
-#: app/forms.py:77
+#: app/forms.py:86
 msgid "Rest password"
 msgstr ""
 
@@ -133,7 +134,7 @@ msgstr ""
 msgid "You just unfollowed %(username)s"
 msgstr ""
 
-#: app/routes.py:208
+#: app/routes.py:208 app/templates/base.html:32
 msgid "Explore"
 msgstr ""
 
@@ -169,6 +170,22 @@ msgstr ""
 #: app/templates/_posts.html:12
 #, python-format
 msgid "%(username)s said %(when)s"
+msgstr ""
+
+#: app/templates/base.html:10
+msgid "Welcome to Microblog"
+msgstr ""
+
+#: app/templates/base.html:29
+msgid "Home"
+msgstr ""
+
+#: app/templates/base.html:43
+msgid "Profile"
+msgstr ""
+
+#: app/templates/base.html:46
+msgid "Log Out"
 msgstr ""
 
 #: app/templates/edit_profile.html:6

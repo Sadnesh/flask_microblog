@@ -15,5 +15,5 @@ __pycache__
 # pot file
 *.pot
 
-# mo file
-.mo
+# compiled translation files
+*.mo

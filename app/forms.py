@@ -74,7 +74,7 @@ class ResetPasswordRequestForm(FlaskForm):
     email = StringField(
         _l("Email"), validators=[DataRequired(), Email()]  # type:ignore
     )
-    submit = SubmitField(str(_l("Request password reset")))
+    submit = SubmitField(_l("Request password reset"))  # type:ignore
 
 
 class ResetPasswordForm(FlaskForm):

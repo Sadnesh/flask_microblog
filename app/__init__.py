@@ -24,7 +24,7 @@ babel = Babel(app, locale_selector=get_locale)
 migrate = Migrate(app, db)
 login = LoginManager(app)
 login.login_view = "login"  # type:ignore
-login.login_message = str(_l("Please log in to access this page."))
+login.login_message = _l("Please log in to access this page.")  # type:ignore
 
 if not app.debug:
     if app.config["MAIL_SERVER"]:
