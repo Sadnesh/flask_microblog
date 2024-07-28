@@ -16,4 +16,5 @@ class Config:
     MAIL_PASSWORD = os.environ.get("MAIL_PASSWORD")
     ADMINS = ["admin1@example.com", "admin2@example.com"]
     POSTS_PER_PAGE = 3
-    LANGUAGES = ["en", "es", "np"]
+    LANGUAGES = ["en", "es", "ne"]
+    TRANSLATE_KEY = os.environ.get("BRAVE_API_KEY")

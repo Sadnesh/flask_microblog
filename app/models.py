@@ -122,6 +122,7 @@ class Post(db.Model):
     )
     user_id: sorm.Mapped[int] = sorm.mapped_column(sal.ForeignKey(User.id), index=True)
     author: sorm.Mapped[User] = sorm.relationship(back_populates="posts")
+    language: sorm.Mapped[Optional[str]] = sorm.mapped_column(sal.String(5))
 
     def __repr__(self) -> str:
         return "<Post {}>".format(self.body)
