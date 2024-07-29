@@ -16,6 +16,10 @@ def get_locale():
 
 
 app = Flask(__name__)
+
+from app.errors import bp as errors_bp
+
+app.register_blueprint(errors_bp)
 app.config.from_object(Config)
 mail = Mail(app)
 db = SQLAlchemy(app)
@@ -60,4 +64,4 @@ if not app.debug:
         app.logger.setLevel(logging.INFO)
         app.logger.info("Microblog startup")
 
-from app import routes, models, errors
+from app import routes, models
