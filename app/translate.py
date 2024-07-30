@@ -1,8 +1,8 @@
 import requests
 from flask_babel import _
-from app import app
+from flask import current_app
 
-api_key = app.config["TRANSLATE_KEY"]
+api_key = current_app.config["TRANSLATE_KEY"]
 
 
 def translate(text, source_lan: str, dest_lang: str):
