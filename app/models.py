@@ -104,9 +104,9 @@ class User(UserMixin, db.Model):
     @staticmethod
     def verify_reset_password_token(token):
         try:
-            id = jwt.decode(token, current_app.config["SECRET_KEY"], algorithms=["HS256"])[
-                "reset_password"
-            ]
+            id = jwt.decode(
+                token, current_app.config["SECRET_KEY"], algorithms=["HS256"]
+            )["reset_password"]
         except:
             return
         return db.session.get(User, id)
@@ -116,6 +116,7 @@ class User(UserMixin, db.Model):
 
 
 class Post(db.Model):
+    __searchable__ = ["body"]
     id: sorm.Mapped[int] = sorm.mapped_column(primary_key=True)
     body: sorm.Mapped[str] = sorm.mapped_column(sal.String(140))
     timestamp: sorm.Mapped[datetime] = sorm.mapped_column(

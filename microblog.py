@@ -1,9 +1,11 @@
 import sqlalchemy as sal
 import sqlalchemy.orm as sorm
-from app import current_app, db, cli
+from app import create_app, db, cli
 from app.models import User, Post
 
+app = create_app()
 
-@current_app.shell_context_processor
+
+@app.shell_context_processor
 def make_shell_context():
     return {"sal": sal, "sorm": sorm, "db": db, "User": User, "Post": Post}

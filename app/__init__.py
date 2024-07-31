@@ -6,6 +6,7 @@ from flask_moment import Moment
 from flask_migrate import Migrate
 from flask_login import LoginManager
 from flask_sqlalchemy import SQLAlchemy
+from elasticsearch import Elasticsearch
 from flask import Flask, request, current_app
 from flask_babel import Babel, lazy_gettext as _l
 from logging.handlers import SMTPHandler, RotatingFileHandler
@@ -35,6 +36,12 @@ def create_app(config_class=Config):
     moment.init_app(app)
     migrate.init_app(app, db)
     babel.init_app(app, locale_selector=get_locale)
+
+    app.elasticsearch = (  # type:ignore
+        Elasticsearch([app.config["ELASTICSEARCH_URL"]])
+        if app.config["ELASTICSEARCH_URL"]
+        else None
+    )
 
     from app.errors import bp as errors_bp
 
@@ -83,7 +90,7 @@ def create_app(config_class=Config):
             )
             file_handler.setLevel(logging.INFO)
             app.logger.addHandler(file_handler)
-            
+
             app.logger.setLevel(logging.INFO)
             app.logger.info("Microblog startup")
     return app
