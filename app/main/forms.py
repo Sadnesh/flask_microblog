@@ -1,5 +1,7 @@
+from flask_wtf.form import _Auto
 from app import db
 import sqlalchemy as sal
+from flask import request
 from app.models import User
 from flask_wtf import FlaskForm
 from flask_babel import _, lazy_gettext as _l
@@ -38,3 +40,14 @@ class EditProfileForm(FlaskForm):
 # For follow and unfollow actions
 class EmptyForm(FlaskForm):
     submit = SubmitField("Submit")
+
+
+class SearchForm(FlaskForm):
+    q = StringField(_l("Search"), validators=[DataRequired()])  # type:ignore
+
+    def __init__(self, *args, **kwargs):
+        if "formdata" not in kwargs:
+            kwargs["formdata"] = request.args
+        if "meta" not in kwargs:
+            kwargs["meta"] = {"csrf": False}
+        super(SearchForm, self).__init__(*args, **kwargs)
